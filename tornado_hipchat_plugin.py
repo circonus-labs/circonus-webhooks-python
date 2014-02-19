@@ -38,18 +38,18 @@ class HipChatHandler(tornado.web.RequestHandler):
 				for alert in data['alerts']:
 					if 'clear_value' in alert:
 						message = 'CLEARED - '+
-									alert['check_name']+' - '+
-									alert['host']+' - '+
-									alert['metric_name']+' - '+
-									'Clear Value = '+alert['clear_value']+' - '+
-									alert['alert_url']
+							alert['check_name']+' - '+
+							alert['host']+' - '+
+							alert['metric_name']+' - '+
+							'Clear Value = '+alert['clear_value']+' - '+
+							alert['alert_url']
 					else:
 						message = 'SEVERITY '+alert['severity']+' - '+
-									alert['check_name']+' - '+
-									alert['host']+' - '+
-									alert['metric_name']+' - '+
-									'Value = '+alert['alert_value']+' - '+
-									alert['alert_url']
+							alert['check_name']+' - '+
+							alert['host']+' - '+
+							alert['metric_name']+' - '+
+							'Value = '+alert['alert_value']+' - '+
+							alert['alert_url']
 					payload['message'] = message
 					r = requests.post(url, data=payload)
 					r.raise_for_status()
