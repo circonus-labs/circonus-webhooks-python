@@ -16,6 +16,10 @@ auth_token = ""
 #HipChat room API ID from https://yourcompany.hipchat.com/admin/rooms
 room_id = ""
 
+#Circonus API Information
+circonus_api_name = ""
+circonus_api_key = ""
+
 class HipChatHandler(tornado.web.RequestHandler):
 	def post(self):
 		#Check to make sure settings are in place
@@ -36,20 +40,26 @@ class HipChatHandler(tornado.web.RequestHandler):
 			else:
 				#Handle alerts that occur from ruleset thresholds
 				for alert in data['alerts']:
+					#If Circonus API details were provided, get the check information from the alert
+					check_bundle = None
+					if circonus_api_name and circonus_api_key:
+						check_bundle = requests.get(
+							"https://api.circonus.com/check_bundle?f__checks_has=/check/"+str(alert['check_id']),
+							auth=(circonus_api_name,circonus_api_key),
+							headers={"Accept": "application/json"}
+						).json()
 					if 'clear_value' in alert:
-						message = 'CLEARED - '+
-							alert['check_name']+' - '+
-							alert['host']+' - '+
-							alert['metric_name']+' - '+
-							'Clear Value = '+alert['clear_value']+' - '+
-							alert['alert_url']
+						message = 'CLEARED - '+alert['check_name']+' - '+alert['host']+' - '+alert['metric_name']+' - '+'Clear Value = '+alert['clear_value']+' - '+alert['alert_url']
 					else:
-						message = 'SEVERITY '+alert['severity']+' - '+
-							alert['check_name']+' - '+
-							alert['host']+' - '+
-							alert['metric_name']+' - '+
-							'Value = '+alert['alert_value']+' - '+
-							alert['alert_url']
+						message = 'SEVERITY '+alert['severity']+' - '+alert['check_name']+' - '+alert['host']+' - '+alert['metric_name']+' - '+'Value = '+alert['alert_value']+' - '+alert['alert_url']
+					#Append tag information to message if we looked up the check_bundle
+					if check_bundle[0]['tags']:
+						message += ' - TAGS = '
+						for tag in check_bundle[0]['tags']:
+							message += tag+', '
+						#Remove trailing comma
+						if message[-2:] == ', ':
+							message = message[:-2]
 					payload['message'] = message
 					r = requests.post(url, data=payload)
 					r.raise_for_status()
