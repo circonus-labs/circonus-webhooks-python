@@ -1,11 +1,3 @@
-'''
-Example alert from Circonus:
-{u’alerts’: [{u'metric_name': u'rtt', u'check_name': u'Google dns test', u'alert_value': u'9.64', u'alert_id': u'8347059', u'agent': u'Ashburn, VA, US', u'check_id': 77831, u'host': u'8.8.4.4', u'alert_time': u'Tue, 18 Feb 2014 19:19:07', u'alert_url': u'https://circonus.com/account/parlette/fault-detection?alert_id=8347059', u'metric_notes': u'Check dashboard, restart server', u'metric_link': u'', u'check_bundle_id': 57620, u'severity': u'2'}], u’account_name’: u’Parlette Demo’}
-
-Corresponding chat message in HipChat
-Circonus Alert (2:42 PM): SEVERITY 2 – Google dns test – 8.8.4.4 – rtt – Value = 9.64 – https://circonus.com/account/parlette/fault-detection?alert_id=8347059
-'''
-
 import requests
 import json
 import tornado.web
