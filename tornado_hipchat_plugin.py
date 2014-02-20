@@ -45,13 +45,14 @@ class HipChatHandler(tornado.web.RequestHandler):
 					else:
 						message = 'SEVERITY '+alert['severity']+' - '+alert['check_name']+' - '+alert['host']+' - '+alert['metric_name']+' - '+'Value = '+alert['alert_value']+' - '+alert['alert_url']
 					#Append tag information to message if we looked up the check_bundle
-					if check_bundle[0]['tags']:
-						message += ' - TAGS = '
-						for tag in check_bundle[0]['tags']:
-							message += tag+', '
-						#Remove trailing comma
-						if message[-2:] == ', ':
-							message = message[:-2]
+					if check_bundle:
+						if check_bundle[0]['tags']:
+							message += ' - TAGS = '
+							for tag in check_bundle[0]['tags']:
+								message += tag+', '
+							#Remove trailing comma
+							if message[-2:] == ', ':
+								message = message[:-2]
 					payload['message'] = message
 					r = requests.post(url, data=payload)
 					r.raise_for_status()
