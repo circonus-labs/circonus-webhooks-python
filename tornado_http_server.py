@@ -5,6 +5,7 @@ import tornado.options
 import tornado.web
 
 from tornado_hipchat_plugin import HipChatHandler
+from tornado_json_check_plugin import JsonCheckHandler
 
 tornado.options.define("port", default=8080, help="Port to run the Tornado server on", type=int)
 
@@ -14,6 +15,7 @@ class Application(tornado.web.Application):
 		#Define the paths that are available for Circonus to POST to
 		handlers = [
 			(r"/hipchat/", HipChatHandler),
+			(r"/json_check/", JsonCheckHandler),
 		]
 		settings = dict()
 		tornado.web.Application.__init__(self, handlers, **settings)
@@ -26,3 +28,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
