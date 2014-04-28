@@ -14,13 +14,13 @@ slack_base_url = "https://circonus.slack.com/"
 circonus_api_name = ""
 circonus_api_key = ""
 
-class HipChatHandler(tornado.web.RequestHandler):
+class SlackHandler(tornado.web.RequestHandler):
 	def post(self):
 		#Check to make sure settings are in place
 		if not auth_token:
-			print "ERROR: auth_token not set in tornado_hipchat_plugin"
+			print "ERROR: auth_token not set in tornado_slack_plugin"
 		elif not room_id:
-			print "ERROR: room_id not set in tornado_hipchat_plugin"
+			print "ERROR: room_id not set in tornado_slack_plugin"
 		else:
 			data = json.loads(self.request.body)
 			print data

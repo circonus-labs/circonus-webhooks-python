@@ -7,6 +7,7 @@ import tornado.web
 from tornado_hipchat_plugin import HipChatHandler
 from tornado_json_check_plugin import JsonCheckHandler
 from tornado_beacon_data_plugin import BeaconDataLogger
+from tornado_slack_plugin import SlackHandler
 
 tornado.options.define("port", default=8080, help="Port to run the Tornado server on", type=int)
 
@@ -17,6 +18,7 @@ class Application(tornado.web.Application):
 		handlers = [
 			(r"/hipchat/", HipChatHandler),
 			(r"/json_check/", JsonCheckHandler),
+			(r"/slack/", SlackHandler),
 		]
 		settings = dict()
 		tornado.web.Application.__init__(self, handlers, **settings)
