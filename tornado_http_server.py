@@ -28,7 +28,7 @@ def main():
 	http_server = tornado.httpserver.HTTPServer(Application())
 	http_server.listen(tornado.options.options.port)
 	#tornado.ioloop.IOLoop.instance().start()
-	interval_ms = 15
+	interval_ms = 1500
 	main_loop = tornado.ioloop.IOLoop.instance()
 	logdata = tornado.ioloop.PeriodicCallback(BeaconDataLogger.logRandomIPData(),interval_ms, io_loop = main_loop)
 	logdata.start()
