@@ -3,12 +3,12 @@ import json
 import tornado.web
 
 #Slack settings for the user to change
-#Slack Webhook key from https://circonus.slack.com/services/new/incoming-webhook
+#Slack Webhook key from https://YOURSITE.slack.com/services/new/incoming-webhook
 auth_token = ""
 #Slack room ID
 room_id = "#general"
 #Base Slack URL for your team.  Must include a trailing slash
-slack_base_url = "https://circonus.slack.com/"
+slack_base_url = "https://YOURSITE.slack.com/"
 #Username that will show in the Slack room
 slack_user = "CirconusBot"
 
@@ -23,6 +23,8 @@ class SlackHandler(tornado.web.RequestHandler):
 			print "ERROR: auth_token not set in tornado_slack_plugin"
 		elif not room_id:
 			print "ERROR: room_id not set in tornado_slack_plugin"
+		elif "YOURSITE" in slack_base_url:
+			print "ERROR: URL not properly setup in tornado_slack_plugin"
 		else:
 			data = json.loads(self.request.body)
 			print data
