@@ -3,12 +3,14 @@ import json
 import tornado.web
 
 #Slack settings for the user to change
-#Slack API key from https://api.slack.com/
+#Slack Webhook key from https://circonus.slack.com/services/new/incoming-webhook
 auth_token = ""
 #Slack room ID
 room_id = "#general"
 #Base Slack URL for your team.  Must include a trailing slash
 slack_base_url = "https://circonus.slack.com/"
+#Username that will show in the Slack room
+slack_user = "CirconusBot"
 
 #Circonus API Information
 circonus_api_name = ""
@@ -24,12 +26,12 @@ class SlackHandler(tornado.web.RequestHandler):
 		else:
 			data = json.loads(self.request.body)
 			print data
-			payload = {'room_id':room_id, 'token':auth_token}
-			url = slack_base_url+"services/hooks/incoming-webhook"
+			payload = {'room_id':room_id, 'username':slack_user}
+			url = slack_base_url+"services/hooks/incoming-webhook?token="+auth_token
 			#Handle the message if someone clicked 'Send Message' from Circonus UI
 			if data['alerts'][0]['metric_name'] == 'dummy_metric_name':
 				payload['text'] = data['alerts'][0]['alert_value']
-				r = requests.post(url, data=payload)
+				r = requests.post(url, data=json.dumps(payload))
 				r.raise_for_status()
 			else:
 				#Handle alerts that occur from ruleset thresholds
@@ -56,6 +58,6 @@ class SlackHandler(tornado.web.RequestHandler):
 							if message[-2:] == ', ':
 								message = message[:-2]
 					payload['text'] = message
-					r = requests.post(url, data=payload)
+					r = requests.post(url, data=json.dumps(payload))
 					r.raise_for_status()
 
